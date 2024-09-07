@@ -1,35 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ProfileForm.css';
 
-const ProfileForm = () => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    title: '',
-    email: '',
-    birthday: {
-      day: '',
-      month: '',
-      year: '',
-    },
-    country: '',
-    state: '',
-    postalCode: '',
-    phoneNumber: '',
-    agreeToEmails: false,
-  });
-
+const ProfileForm = ({ tempData, setTempData, setFormData }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     if (type === 'checkbox') {
-      setFormData({ ...formData, [name]: checked });
+      setTempData({ ...tempData, [name]: checked });
+    } else if (name === 'day' || name === 'month' || name === 'year') {
+      setTempData({
+        ...tempData,
+        birthday: { ...tempData.birthday, [name]: value }
+      });
     } else {
-      setFormData({ ...formData, [name]: value });
+      setTempData({ ...tempData, [name]: value });
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    setFormData(tempData);
+    console.log('Form submitted:', tempData);
   };
 
   return (
@@ -40,7 +31,7 @@ const ProfileForm = () => {
       <input
         type="text"
         name="fullName"
-        value={formData.fullName}
+        value={tempData.fullName}
         onChange={handleChange}
         placeholder="Enter your full name"
       />
@@ -49,7 +40,7 @@ const ProfileForm = () => {
       <input
         type="text"
         name="title"
-        value={formData.title}
+        value={tempData.title}
         onChange={handleChange}
         placeholder="Enter your title here"
       />
@@ -58,14 +49,14 @@ const ProfileForm = () => {
       <input
         type="email"
         name="email"
-        value={formData.email}
+        value={tempData.email}
         onChange={handleChange}
         placeholder="Enter your email here"
       />
 
       <label>Birthday</label>
       <div className="birthday">
-        <select name="day" value={formData.birthday.day} onChange={handleChange}>
+        <select name="day" value={tempData.birthday.day} onChange={handleChange}>
           <option value="">Day</option>
           {[...Array(31)].map((_, i) => (
             <option key={i} value={i + 1}>
@@ -74,7 +65,7 @@ const ProfileForm = () => {
           ))}
         </select>
 
-        <select name="month" value={formData.birthday.month} onChange={handleChange}>
+        <select name="month" value={tempData.birthday.month} onChange={handleChange}>
           <option value="">Month</option>
           {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((month, i) => (
             <option key={i} value={month}>
@@ -83,7 +74,7 @@ const ProfileForm = () => {
           ))}
         </select>
 
-        <select name="year" value={formData.birthday.year} onChange={handleChange}>
+        <select name="year" value={tempData.birthday.year} onChange={handleChange}>
           <option value="">Year</option>
           {Array.from({ length: 100 }, (_, i) => 2023 - i).map((year) => (
             <option key={year} value={year}>
@@ -94,15 +85,19 @@ const ProfileForm = () => {
       </div>
 
       <label>Country</label>
-      <select name="country" value={formData.country} onChange={handleChange}>
-        <option value="">Not Chosen</option>
-      </select>
+      <input
+        type="text"
+        name="country"
+        value={tempData.country}
+        onChange={handleChange}
+        placeholder="Enter your country"
+      />
 
       <label>State/Province/Region</label>
       <input
         type="text"
         name="state"
-        value={formData.state}
+        value={tempData.state}
         onChange={handleChange}
         placeholder="Type here"
       />
@@ -111,7 +106,7 @@ const ProfileForm = () => {
       <input
         type="text"
         name="postalCode"
-        value={formData.postalCode}
+        value={tempData.postalCode}
         onChange={handleChange}
         placeholder="Type here"
       />
@@ -120,7 +115,7 @@ const ProfileForm = () => {
       <input
         type="tel"
         name="phoneNumber"
-        value={formData.phoneNumber}
+        value={tempData.phoneNumber}
         onChange={handleChange}
         placeholder="Type here"
       />
@@ -128,14 +123,16 @@ const ProfileForm = () => {
       <div className="checkbox">
         <input
           type="checkbox"
-          name="agreeToEmails"
-          checked={formData.agreeToEmails}
+          name="agreeToSubmit"
+          checked={tempData.agreeToSubmit}
           onChange={handleChange}
         />
-        <label>I agree to receive notification emails from Ivive</label>
+        <label>I understand the Terms and Conditions</label>
       </div>
 
-      <button type="submit" className="submit-btn">Update Information</button>
+      <button type="submit" className="submit-btn" disabled={!tempData.agreeToSubmit}>
+        Update Information
+      </button>
     </form>
   );
 };

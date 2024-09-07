@@ -1,82 +1,85 @@
 import React, { useState } from 'react';
-import './ProfileLinks.css';
+import './ProfileLinks.css'; 
 
-const ExternalLinksForm = () => {
-  const [formData, setFormData] = useState({
-    facebook: '',
-    twitter: '',
-    blogger: '',
-    googlePlus: '',
-    linkedin: '',
-    website: '',
+const ProfileLinks = ({ formData, setFormData }) => {
+  const [links, setLinks] = useState({
+    facebook: formData.externalLinks?.facebook || '',
+    twitter: formData.externalLinks?.twitter || '',
+    blogger: formData.externalLinks?.blogger || '',
+    googlePlus: formData.externalLinks?.googlePlus || '',
+    linkedin: formData.externalLinks?.linkedin || '',
+    website: formData.externalLinks?.website || '',
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setLinks({ ...links, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    setFormData((prevData) => ({
+      ...prevData,
+      externalLinks: links,
+    }));
   };
 
   return (
     <form className="external-links-form" onSubmit={handleSubmit}>
       <h2>Your External Links</h2>
 
-      <label>Facebook URL:</label>
+      <label>Facebook Username:</label>
       <input
-        type="url"
+        type="text"
         name="facebook"
-        value={formData.facebook}
+        value={links.facebook}
         onChange={handleChange}
-        placeholder="Paste your link here"
+        placeholder="Enter your Facebook username"
       />
 
-      <label>Twitter URL:</label>
+      <label>Twitter Username:</label>
       <input
-        type="url"
+        type="text"
         name="twitter"
-        value={formData.twitter}
+        value={links.twitter}
         onChange={handleChange}
-        placeholder="Paste your link here"
+        placeholder="Enter your Twitter username"
       />
 
-      <label>Blogger URL:</label>
+      <label>Blogger Username:</label>
       <input
-        type="url"
+        type="text"
         name="blogger"
-        value={formData.blogger}
+        value={links.blogger}
         onChange={handleChange}
-        placeholder="Paste your link here"
+        placeholder="Enter your Blogger username"
       />
 
-      <label>Google+ URL:</label>
+      <label>Google+ ID:</label>
       <input
-        type="url"
+        type="text"
         name="googlePlus"
-        value={formData.googlePlus}
+        value={links.googlePlus}
         onChange={handleChange}
-        placeholder="Paste your link here"
+        placeholder="Enter your Google+ ID"
       />
 
-      <label>Linkedin URL:</label>
+      <label>LinkedIn Username:</label>
       <input
-        type="url"
+        type="text"
         name="linkedin"
-        value={formData.linkedin}
+        value={links.linkedin}
         onChange={handleChange}
-        placeholder="Paste your link here"
+        placeholder="Enter your LinkedIn username"
       />
 
-      <label>Website URL:</label>
+      <label>Website Domain:</label>
       <input
-        type="url"
+        type="text"
         name="website"
-        value={formData.website}
+        value={links.website}
         onChange={handleChange}
-        placeholder="Paste your link here"
+        placeholder="Enter your website domain"
       />
 
       <button type="submit" className="submit-btn">Save & Update</button>
@@ -84,4 +87,4 @@ const ExternalLinksForm = () => {
   );
 };
 
-export default ExternalLinksForm;
+export default ProfileLinks;
